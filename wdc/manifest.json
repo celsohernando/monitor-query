@@ -1,0 +1,37 @@
+{
+  "name" : "alerts",
+  "description": "Python skill starter that helps you quickly build Watson Assistant Skill ",
+  "private": false,
+  "author" : "Carlos Ferreira",
+  "version" : "0.0.1",
+  "license" : "Apache-2.0",
+  "callword": "alerts",
+  "lifetime": "Hello lifetime",
+  "threshold": 0.4,
+  "nlu":[
+  "skill"
+  ],
+  "languages": [
+    "en-US"
+  ],
+  "tags": [
+    "alerts","skill"
+  ],
+  "services": [{
+        "name": "Service Name this skill calls",
+        "description": "Description this skill calls",
+        "url": "url this skill calls",
+        "attributes": [
+          {
+            "name": "First attribute name this skill calls",
+            "type": "First attribute type this skill calls",
+            "required": false
+          },
+          {
+            "name": "Second attribute name this skill calls",
+            "type": "Second attribute type this skill calls",
+            "required": true
+          }
+        ]
+  }]
+}

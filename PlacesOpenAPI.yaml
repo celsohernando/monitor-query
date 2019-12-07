@@ -1,0 +1,118 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Places Alers Skill for Watson Assistant Solution",
+    "description": "A Watson Assistant Solution skill API that uses a allows you to converse with Watson Assistant via Twitter Feeds using the swagger-2.0 specification",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "name": "Carlos Ferreira"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "host": "monitor-query.mybluemix.net",
+  "basePath": "/v1/api/#/EntityTypes",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/configure": {
+      "post": {
+        "description": "Configure new service for new location with twitter user ids",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+              "success": 200
+          }
+        }
+      }
+    },
+    "/converse": {
+      "post": {
+        "description": "Converse Twitter news.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+              "success": 200
+          }
+        }
+      }
+    },
+  "/reading": {
+    "get": {
+      "description": "Reading to retrieve current device readings of a particular device type, path and device ID.",
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+            "success": 200
+        }
+      }
+    }
+  },
+  "/manifest": {
+    "get": {
+      "description": "Get Manifest of the Twitter news skill.",
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+                "threshold": "0.4",
+                "tags": [
+                  "alerts,skill"
+                ],
+                "languages": [
+                  "en-US"
+                ],
+                "author": "Carlos Ferreira",
+                "license": "Apache-2.0",
+                "callword": "alerts",
+                "lifetime": "Hello lifetime",
+                "private": false,
+                "nlu": [
+                  "skill"
+                ],
+                "name": "alerts",
+                "version": "0.0.1",
+                "description": "Python skill starter that helps you quickly build Watson Assistant Skill "
+              }
+    }
+  }
+}
+},
+  "definitions": {
+    "Pet": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
