@@ -146,9 +146,14 @@ class WatsonIot(object):
     def get_entity_type_dimensions(self,request):
         app.logger.info('get_entity_type_dimensions------- ')
         try:
+            entitytype = request.json['entitytype']
+            app.logger.debug('query -  entitytype %s' % entitytype)
+        except KeyError as inst:
+            app.logger.debug('query - Wrong input provided')
+        try:
             iot_entity_type = IotEntityType()
-            entity_type_dimensions = iot_entity_type.get_entity_type_dimensions()
-            logging.info("get_entity_types(self)")
+            entity_type_dimensions = iot_entity_type.get_entity_type_dimensions(entitytype=entitytype)
+            logging.info("get entity_type_dimensions %s " %entity_type_dimensions)
         except KeyError as inst:
             app.logger.debug('get_entity_type_dimensions method - problems accessing Service')
         response_back = { "data" : None,
@@ -183,11 +188,13 @@ class WatsonIot(object):
     def get_entity_type_metadata(self, request):
         app.logger.debug('class WatsonIOT , get_entity_type_metadata method -------')
         try:
-            iot_entity_type = IotEntityType()
-            entity_type_metadata = iot_entity_type.get_entity_type_metadata("Clients04")
-            logging.info("entity_type_metadata %s " %entity_type_metadata)
+            entitytype = request.json['entitytype']
+            app.logger.debug('query -  entitytype %s' % entitytype)
         except KeyError as inst:
-            app.logger.debug('get_entity_type_metadata method - problems accessing Service')
+            app.logger.debug('query - Wrong input provided')
+        iot_entity_type = IotEntityType()
+        entity_type_metadata = iot_entity_type.get_entity_type_metadata(entitytype)
+        logging.info("entity_type_metadata %s " %entity_type_metadata)
         response_back = {"data": None,
                          "responseCode": 200,
                          "requestResult": "Done",

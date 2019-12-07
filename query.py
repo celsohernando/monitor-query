@@ -1,6 +1,7 @@
 import datetime as dt
 import json
 import logging
+import urllib3
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, func
 from iotfunctions.db import Database
 from iotfunctions.enginelog import EngineLogging
@@ -27,9 +28,10 @@ class IotEntityType(object):
         #self.dim_table_name = "DM_"+self.table_name  # change to a entity dimenstion table name
         #self.timestamp = 'evt_timestamp'
         with open('credentials_Monitor-Demo.json', encoding='utf-8') as F:
-            credentials = json.loads(F.read())
-        self.db = Database(credentials=credentials)
+            self.credentials = json.loads(F.read())
+        self.db = Database(credentials=self.credentials)
         self.entity_type_names = self.get_entity_types
+        self.http = urllib3.PoolManager()
 
     # Works
     def get_entity_types(self):
@@ -44,26 +46,29 @@ class IotEntityType(object):
         return(entity_types)
 
 
-    def get_entity_type_dimensions(self):
-        logging.info("get_entity_type_dimensions")
+    def get_entity_type_dimensions(self, entitytype=None):
+        logging.info("get_entity_type_dimensions %s " %entitytype)
         # Call HTTP REST Service
         # https://api-beta.connectedproducts.internetofthings.ibmcloud.com/api/master/v1/Monitor-Demo/entity/type/Clients04/categorical
-        encoded_payload = json.dumps(payload).encode('utf-8')
-        headers = {'Content-Type': "application/json", 'X-api-key': self.credentials['as']['api_key'],
-                   'X-api-token': self.credentials['as']['api_token'], 'Cache-Control': "no-cache", }
+        #payload = ''
+        #encoded_payload = json.dumps(payload).encode('utf-8')
+        headers = {'Content-Type': "application/json", 'x-api-key': self.credentials['iotp']['apiKey'],
+                   'x-api-token': self.credentials['iotp']['apiToken'], }
         try:
-            url = "https://api-beta.connectedproducts.internetofthings.ibmcloud.com/api/master/v1/Monitor-Demo/entity/type/Clients04/categorical"
+            url = 'https://api-beta.connectedproducts.internetofthings.ibmcloud.com/api/master/v1/Monitor-Demo/entity/type/' + entitytype + '/categorical'
         except KeyError:
             raise ValueError(('This combination  of request_type (%s) and'
                               ' object_type (%s) is not supported by the'
                               ' python api') % (object_type, request))
 
-        r = self.http.request("POST", url, body=encoded_payload, headers=headers)
-        response = r.data.decode('utf-8')
-        for item in response:
-            logging.info("dimensions item %s" % item)
-            #entity_types.append(item)
-        self.dimensions = response
+        r = self.http.request("GET", url, body="", headers=headers)
+        #response = r.data.decode('utf-8')
+        response = json.loads(r.data.decode('utf-8'))
+        logging.info("get_entity_type_dimensions response %s" %response)
+        #for item in response:
+        #    logging.info("dimensions item %s" % item)
+        #    dimensions.append(item)
+        #self.dimensions = dimensions
         return(response)
 
     # Works
@@ -108,8 +113,8 @@ class IotEntity(object):
         self.dim_table_name = "DM_"+self.table_name  # change to a entity dimenstion table name
         self.timestamp = 'evt_timestamp'
         with open('credentials_Monitor-Demo.json', encoding='utf-8') as F:
-            credentials = json.loads(F.read())
-        self.db = Database(credentials=credentials)
+            self.credentials = json.loads(F.read())
+        self.db = Database(credentials=self.credentials)
 
     def query(self, metrics=None, timestamp='evt_timestamp', agg_dict=None, to_csv=True):
         logging.info("Query %s and output format is %s" %(agg_dict, to_csv) )
@@ -162,8 +167,8 @@ if __name__ == "__main__":
 
     iot_entity_type = IotEntityType()
     #logging.info("get_entity_types(self) %s " %iot_entity_type.get_entity_types())
-    logging.info("get_entities(self) %s " % iot_entity_type.get_entity_type_metadata("Clients04"))
-    #logging.info("get_entities(self) %s " % iot_entity_type.get_entity_type_dimensions("Clients04"))
+    #logging.info("get_entities(self) %s " % iot_entity_type.get_entity_type_metadata("Clients04"))
+    logging.info("get_entities(self) %s " %iot_entity_type.get_entity_type_dimensions(entitytype="Clients04"))
     #now = dt.datetime.utcnow()
     #start_ts="2019-12-07 10:34:24.198099"
     #query_data = IotEntity(entity_type_name="Clients04", entity_name="A101").query_entity_data( columns=["TEMPERATURE"],
