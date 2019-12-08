@@ -34,31 +34,6 @@ api = Api(api_v1, name="SkillAPI", version='1.0', title='IOT Query Service',
     description='Allows you to qyery timeseries data of IOT Devices in Maximo Asset Monitor',)
 app.logger.debug('Created API ')
 
-manifest_input = api.model('manifest', {"manifest" :{}
-})
-
-user_data = api.model('user_data', {
-  'id': fields.String(readOnly=True, description='The task unique identifier'),
-})
-
-session_data = api.model('session_data', {
-    'id': fields.String(readOnly=True, description='The task unique identifier'),
-    'new': fields.Boolean(required=False, description='This is a new session'),
-    'attributes': fields.String(required=True, description='JSON'),
-    'version': fields.String(required=True, version='0.0.1'),
-})
-
-application_data = api.model('application_data', {
-  'id': fields.String(readOnly=True, description='The task unique identifier'),
-  'attributes': fields.String(required=True, description='attributes JSON'),
-})
-
-context_data = api.model('context_data', {
-  'user': fields.Nested(user_data),
-  'session': fields.Nested(session_data),
-  'application': fields.Nested(application_data),
-})
-
 query_entity_data_input_data = api.model('query_entity_data_input_data', {
     'entitytype': fields.String(required=True, description='Entity Type'),
     'entity': fields.String(required=True, description='Entity'),
@@ -75,63 +50,12 @@ get_entity_type_metadata_input_data = api.model('get_entity_type_metadata_input_
     'entity_type': fields.String(required=True, description='The Entity Type you want to get the Entity Metadata for.'),
 })
 
-manifest = api.model('Manifest', {
-  'name': fields.String(required=True, description='The skill name'),
-  'description': fields.String(required=True, description='A description of what the skill does'),
-  'private': fields.Boolean(required=False, description='Set false to make the skill discoverable'),
-  'author': fields.String(required=True, author='The business or technical owner'),
-  'version': fields.String(required=True, version='0.0.1'),
-  'license': fields.String(required=True, description='For example: Apache-2.0'),
-  'callword': fields.String(required=True, description='How to call this skill by name'),
-  'lifetime': fields.String(required=True, description='lifetime'),
-  'threshold': fields.Float(required=True, description='0.85'),
-  'languages': fields.List(fields.String),
-  #'nlu': fields.String(required=True, description='"nlu": ["regexp"]'),
-  'tags': fields.List(fields.String),
-  'nlu': fields.List(fields.String),
-  'services': fields.List(fields.String),
-  })
-
-workspace_data = api.model('workspace_data', {
-  'en-US': fields.Nested(
-                    api.model('Name',
-                            { 'name': fields.String(required=True, description='restaurant-en') }
-                            )
-            )
-})
-
-#workspace_data = api.model( { fields.List(fields.Nested(language_data) )
-#})
-
 credentials_data = api.model('credentials_data',{
                                 'version': fields.String( required=False, description='Version' ) ,
                                 'version_date': fields.Date( required=False, description='Date 2016-09-27' ) ,
                                 'password': fields.String( required=False, description='Password' ) ,
                                 'username': fields.String( required=False, description='Username' ),
 })
-
-nlu = api.model('NLU', {
-  'workspace' : fields.Nested(workspace_data),
-  'credentials' : fields.Nested(credentials_data),
-})
-
-
-entities =  api.model('Entities', {
-    'entities' : fields.Nested(
-                    api.model('Name',
-                                { "name" : fields.String( required=False, description='Entity name' ) ,
-                                 'required': fields.Boolean( required=False, description='Required or not. Boolean' )
-                                 }
-                    )
-                )
-    }
-)
-
-intents = api.model('Intents', {
-  'visibility' : fields.Boolean( required=False, description='visibility. value = always' ) ,
-  'entities' : fields.Nested(entities),
-})
-
 
 ###
 # Business Logic that retrieves your skill data via methods that will be used by the get, put, post and delete in Swagger Classes below.
@@ -260,40 +184,7 @@ class WatsonIot(object):
         response_back['data'] = json.loads(query_data)
         return response_back
 
-    def manifest(self,request):
-        app.logger.debug('class WatsonAssistant - Entereed manifest method in welcome and Arg ID -------')
-        # Chck if response from conversation service cntx with this user has location and category exist
-        response_back = {
-          "responseCode": 200,
-          "requestResult": "Done",
-          }
-        return response_back
-
-    def nlu(self,request):
-        # Chck if response from conversation service cntx with this user has location and category exist
-        response_back = {
-          "responseCode": 200,
-          "requestResult": "Done",
-          }
-        return response_back
-    def intents(self,request):
-        # Chck if response from conversation service cntx with this user has location and category exist
-        response_back = {
-          "responseCode": 200,
-          "requestResult": "Done",
-          }
-        return response_back
-
 rest_api = WatsonIot()
-
-@api.route('/manifest')
-class Manifest(Resource):
-    # @api.expect(manifest_input)
-    # curl http://localhost:5000/manifest
-    def get(self, **kwargs):
-        app.logger.debug('class Manifest Resource ----------------------')
-        app.logger.debug('class Manifest Resource Method get, returning WPASkill.manifest')
-        return rest_api.manifest(request), 201
 
 @api.route('/query_entity_data')
 class Query_Entity_Data(Resource):
@@ -317,13 +208,6 @@ class Get_Entity_Types(Resource):
     app.logger.debug('class Get_Entity_Types Resource ----------------------')
     def get(self, **kwargs):
         return rest_api.get_entity_types(request), 201
-
-@api.route('/intents')
-class Intents(Resource):
-    def get(self, **kwargs):
-        app.logger.debug('class Intents Resource  api route----------------------')
-        # curl http://127.0.0.1:5000/v1/api/intents
-        return rest_api.intents(request), 201
 
 @api.route('/get_entity_type_dimensions')
 class Get_Entity_Type_Dimensions(Resource):
