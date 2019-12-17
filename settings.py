@@ -1,93 +1,62 @@
-#--------------------------------------------------------------------------------
-# These tokens are needed for user authentication.
-# Credentials can be generates via Twitter's Application Management:
-#	https://apps.twitter.com/app/new
-#--------------------------------------------------------------------------------
-
-# settings.py
 import os
+import json
 import logging
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 from dotenv import load_dotenv
-load_dotenv()
-
-# OR, the same with increased verbosity:
-load_dotenv(verbose=True)
-
-# OR, explicitly providing path to '.env'
-from pathlib import Path  # python3 only
+from os.path import join, dirname
 
 
-# If on bluemix load env differently
-# Load Environment variables set via VCAP variables in Bluemix
-if 'VCAP_SERVICES' in os.environ:
+def set_log_level(logger_level):
+    logging.getLogger().setLevel(logger_level)
+
+    # create console handler and set level to debug
+    ch = logging.StreamHandler()
+    ch.setLevel(logger_level)
+
+    # create formatter
+    formatter = logging.Formatter('\n%(asctime)s - %(name)s - %(levelname)s - \n%(message)s')
+
+    # add formatter to ch
+    ch.setFormatter(formatter)
+
+    # add ch to logger
+    logging.getLogger().addHandler(ch)
+
+
+# Configure Logging Default
+set_log_level(logging.INFO)
+
+# Determine where running and load credentials
+if 'VCAP_APPLICATION' in os.environ:
+    # Running on BLuemix load credentials from VCAP Services.
     print("On Bluemix...")
-
-# Load Environment Variables in a sane non Bluemix way
+    vcap_application = json.loads(os.environ.get('VCAP_APPLICATION'))
+    logging.info('vcap_services: %s ' %vcap_application)
+    logging.info('Credentials user defined env var before %s ' %os.getenv("CREDENTIALS"))
+    CREDENTIALS = json.loads( os.getenv("CREDENTIALS") )
+    logging.info('Credentials after %s ' %CREDENTIALS)
 else:
-    print("Not On Bluemix...")
-    env_path = Path('.') / '.env'
-    load_dotenv(dotenv_path=env_path)
+    # Running local and get credentials from the json file passed in.
 
+    # Check for existance of .env file
+    env_path = join(dirname(__file__), '.env')
 
+    # Load .env file into os.environ
+    #load_dotenv(env_path)
 
-ACCESS_KEY = os.getenv("ACCESS_KEY")
-logger.debug('ACCESS_KEY %s' %ACCESS_KEY )
-ACCESS_SECRET = os.getenv("ACCESS_SECRET")
-logger.debug('ACCESS_SECRET %s' %ACCESS_SECRET )
-CONSUMER_KEY = os.getenv("CONSUMER_KEY")
-logger.debug('CONSUMER_KEY %s' %CONSUMER_KEY )
-CONSUMER_SECRET = os.getenv("CONSUMER_SECRET")
-logger.debug('CONSUMER_SECRET %s' %CONSUMER_SECRET )
-ACCESS_KEY = os.getenv("ACCESS_KEY")
-A101FLATLINE_TEMP = os.getenv("A101FLATLINE_TEMP")
-logger.debug('A101FLATLINE_TEMP %s' %A101FLATLINE_TEMP )
-A101FLATLINE_TIME = os.getenv("A101FLATLINE_TIME")
-logger.debug('A101FLATLINE_TIME %s' %A101FLATLINE_TIME )
-A101_INDEX = os.getenv("A101_INDEX")
-logger.debug('A101_INDEX %s' %A101_INDEX )
-
-# ANomaly Temp
-def setenv_temp( env_temp ):
-    logger.debug("Check setenv_temp input temp %s "  %env_temp)
-    os.environ["A101FLATLINE_TEMP"] = env_temp
-    A101FLATLINE_TEMP = os.environ["A101FLATLINE_TEMP"]
-    logger.debug("Check that flatline A101FLATLINE_TEMP was set in settings %s "  %A101FLATLINE_TEMP)
-    return
-
-def getenv_temp():
-    A101FLATLINE_TEMP = os.environ["A101FLATLINE_TEMP"]
-    logger.debug("getenv_temp  A101FLATLINE_TEMP %s "  %A101FLATLINE_TEMP)
-    return A101FLATLINE_TEMP
-
-#Anomaly Time
-def setenv_time( env_time ):
-    logger.debug("Check setenv_temp input env_time %s "  %env_time)
-    if env_time == None:
-        os.environ["A101FLATLINE_TIME"] = "None"
-    else:
-        os.environ["A101FLATLINE_TIME"] = env_time
-    A101FLATLINE_TIME = os.environ["A101FLATLINE_TIME"]
-    logger.debug("Check that flatline A101FLATLINE_TIME was set in settings %s "  %A101FLATLINE_TIME)
-    return
-
-def getenv_time():
-    A101FLATLINE_TIME = os.environ["A101FLATLINE_TIME"]
-    logger.debug("getenv_time  A101FLATLINE_TIME %s "  %A101FLATLINE_TIME)
-    return A101FLATLINE_TIME
-
-
-def setenv_index( env_index ):
-    logger.debug("Incremented A101_INDEX" )
-    logger.debug(  env_index )
-    os.environ["A101_INDEX"] =  str(env_index)
-    A101_INDEX = os.getenv("A101_INDEX")
-    logger.debug("Incremented Final A101_INDEX ")
-    logger.debug( A101_INDEX )
-    return
-
-def getenv_index():
-    A101_INDEX = os.environ["A101_INDEX"]
-    logger.debug("getenv_index  A101_INDEX %s "  %A101_INDEX )
-    return A101_INDEX
+    # ===================
+    # Load credentials.json file that has been downloaded from Monitor Usage tab
+    # credentials_Monitor-Demo
+    # or
+    # credentials_beta-3 - Demo
+    # ===================
+    try:
+        with open('credentials_beta-3.json', encoding='utf-8') as F:
+            logging.info('Running Local Credentials user defined env var before %s ' %F.read())
+        with open('credentials_beta-3.json', encoding='utf-8') as F:
+            CREDENTIALS = json.loads(F.read())
+            logging.info('Running Local Credentials after %s ' %CREDENTIALS)
+    except Exception as ex:
+        logging.info('Exception Credentials %s ' %CREDENTIALS)
+        template = 'Error: {0} Problem reading Consumer Settings credentials or urls from environment variables.: \n{1!r}'
+        message = template.format(type(ex).__name__, ex.args)
+        logging.error(message)

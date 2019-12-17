@@ -5,7 +5,7 @@ import urllib3
 from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean, func
 from iotfunctions.db import Database
 from iotfunctions.enginelog import EngineLogging
-
+import settings
 EngineLogging.configure_console_logging(logging.DEBUG)
 
 class IotEntityType(object):
@@ -27,8 +27,13 @@ class IotEntityType(object):
         #self.table_name =  entity_type_name.upper()  # change to a valid entity time series table name
         #self.dim_table_name = "DM_"+self.table_name  # change to a entity dimenstion table name
         #self.timestamp = 'evt_timestamp'
-        with open('credentials_Monitor-Demo.json', encoding='utf-8') as F:
-            self.credentials = json.loads(F.read())
+        self.credentials = settings.CREDENTIALS
+        #logging.info('username %s' %self.credentials['db2']['username'])
+        #logging.info('password %s' %self.credentials['db2']['password'])
+        #logging.info('host %s' %self.credentials['db2']['host'])
+        #logging.info('port %s' %self.credentials['db2']['port'])
+        #logging.info('databaseName%s' %self.credentials['db2']['databaseName'])
+
         self.db = Database(credentials=self.credentials)
         self.entity_type_names = self.get_entity_types
         self.http = urllib3.PoolManager()
@@ -48,7 +53,8 @@ class IotEntityType(object):
 
     def get_entity_type_dimensions(self, entitytype=None):
         logging.info("get_entity_type_dimensions %s " %entitytype)
-        # Call HTTP REST Service
+        dimensions_list = []
+        # Call HTTP REST Service using: https://urllib3.readthedocs.io/en/latest/user-guide.html
         # https://api-beta.connectedproducts.internetofthings.ibmcloud.com/api/master/v1/Monitor-Demo/entity/type/Clients04/categorical
         #payload = ''
         #encoded_payload = json.dumps(payload).encode('utf-8')
@@ -62,13 +68,20 @@ class IotEntityType(object):
                               ' python api') % (object_type, request))
 
         r = self.http.request("GET", url, body="", headers=headers)
+        logging.info("get_entity_type_dimensions response %s" %r.status)
         #response = r.data.decode('utf-8')
-        response = json.loads(r.data.decode('utf-8'))
-        logging.info("get_entity_type_dimensions response %s" %response)
-        #for item in response:
-        #    logging.info("dimensions item %s" % item)
-        #    dimensions.append(item)
-        #self.dimensions = dimensions
+
+        if r.status == 401:
+            logging.info("get_entity_type_dimensions not found on this entity.")
+            response = {"None": "None"}
+        else:
+            # if response.status_code >= 300 or response.status_code < 200:
+            response = json.loads(r.data.decode('utf-8'))
+            logging.info("get_entity_type_dimensions response %s" % response)
+            for item in response:
+                logging.info("dimensions item %s" % item)
+                dimensions_list.append(item)
+            self.dimensions = dimensions_list
         return(response)
 
     # Works
@@ -152,13 +165,28 @@ class IotEntity(object):
             Column names to parse as dates
         '''
         columns.append("EVT_TIMESTAMP")
-        df = self.db.read_table(table_name=self.table_name,
-                                schema=self.db_schema,
-                                parse_dates=None,
-                                columns=columns,
-                                timestamp_col='evt_timestamp',
-                                start_ts=start_ts,
+        try:
+            df = self.db.read_table(table_name=self.table_name,
+                                    schema=self.db_schema,
+                                    parse_dates=None,
+                                    columns=columns,
+                                    timestamp_col='evt_timestamp',
+                                    start_ts=start_ts,
                                 end_ts=end_ts)
+        except KeyError:
+            # try and see if this data in in the IOT Entity Table instead
+            try:
+                df = self.db.read_table(table_name="IOT_" + self.table_name,
+                                        schema=self.db_schema,
+                                        parse_dates=None,
+                                        columns=columns,
+                                        timestamp_col='RCV_TIMESTAMP_UTC',
+                                        start_ts=start_ts,
+                                        end_ts=end_ts)
+
+            except KeyError:
+                raise ValueError("Entity was not found in database")
+
         logging.info (df)
         query_data = df.to_json()
         return query_data

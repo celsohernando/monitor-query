@@ -13,4 +13,3 @@ ibm-cos-sdk-s3transfer==2.4.4
 ibm-db==3.0.1
 ibm-db-sa==0.3.4
 idna==2.8
-iotfunctions==2.0.1

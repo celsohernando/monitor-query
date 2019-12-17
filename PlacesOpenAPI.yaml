@@ -2,14 +2,14 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "Places Alers Skill for Watson Assistant Solution",
-    "description": "A Watson Assistant Solution skill API that uses a allows you to converse with Watson Assistant via Twitter Feeds using the swagger-2.0 specification",
+    "title": "Maximo Asset Monitor Query REST API",
+    "description": "A Maximo Asset Monitor API Query REST interface that uses a allows you to converse with Maximo Asset Monitor data using the swagger-2.0 specification",
     "termsOfService": "http://swagger.io/terms/",
     "contact": {
       "name": "Carlos Ferreira"
     },
     "license": {
-      "name": "MIT"
+      "name": "Apache 2.0"
     }
   },
   "host": "monitor-query.mybluemix.net",
@@ -24,9 +24,9 @@
     "application/json"
   ],
   "paths": {
-    "/configure": {
+    "/query_entity_data": {
       "post": {
-        "description": "Configure new service for new location with twitter user ids",
+        "description": "Query to retrieve asset metrics by specifying columns names and start and end times",
         "produces": [
           "application/json"
         ],
@@ -37,9 +37,9 @@
         }
       }
     },
-    "/converse": {
+    "/get_entity_type_metadata": {
       "post": {
-        "description": "Converse Twitter news.",
+        "description": "Get Entity Type Metadata for an asset.",
         "produces": [
           "application/json"
         ],
@@ -50,47 +50,30 @@
         }
       }
     },
-  "/reading": {
-    "get": {
-      "description": "Reading to retrieve current device readings of a particular device type, path and device ID.",
-      "produces": [
-        "application/json"
-      ],
-      "responses": {
-        "200": {
+    "/get_entity_type_dimensions": {
+      "post": {
+        "description": "Get Entity Type dimensions for an asset.",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
             "success": 200
+          }
         }
       }
-    }
-  },
-  "/manifest": {
+    },
+  "/get_entity_types": {
     "get": {
-      "description": "Get Manifest of the Twitter news skill.",
+      "description": "Get all Monitor Entity Types.",
       "produces": [
         "application/json"
       ],
       "responses": {
         "200": {
-                "threshold": "0.4",
-                "tags": [
-                  "alerts,skill"
-                ],
-                "languages": [
-                  "en-US"
-                ],
-                "author": "Carlos Ferreira",
-                "license": "Apache-2.0",
-                "callword": "alerts",
-                "lifetime": "Hello lifetime",
-                "private": false,
-                "nlu": [
-                  "skill"
-                ],
-                "name": "alerts",
-                "version": "0.0.1",
-                "description": "Python skill starter that helps you quickly build Watson Assistant Skill "
-              }
-    }
+          "success": 200
+        }
+      }
   }
 }
 },

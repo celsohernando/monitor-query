@@ -8,12 +8,13 @@ from werkzeug.contrib.fixers import ProxyFix
 import logging
 #from wdc.watson_assistant_swagger import SkillSwagger
 import os, json
-from query import IotEntity, IotEntityType
 import datetime as dt
 from time import gmtime, strftime
 import settings
 import random
 import numpy as np
+import subprocess
+import settings
 
 #help curl --help
 app = Flask(__name__, static_folder='static')
@@ -23,6 +24,40 @@ app.logger.addHandler(logging.StreamHandler())
 #app.logger.setLevel(logging.INFO)
 app.logger.setLevel(logging.DEBUG)
 #app.logger.info('XXXXXXXXXXXXXXXXXXXXXXXX - Get port %s ' %port)
+
+url = "git+https://github.com/ibm-watson-iot/functions.git@production"
+'''
+Install python package located at URL
+'''
+app.logger.debug('running pip install for url %s' % url)
+
+if url is None or url == '':
+    app.logger.info('pip install for url %s was ignored. URL is empty.' % url)
+
+try:
+    completedProcess = subprocess.run(
+        ['pip3', 'install',
+         '--upgrade', url],
+        stderr=subprocess.STDOUT,
+        stdout=subprocess.PIPE,
+        universal_newlines=True)
+except Exception as e:
+    raise ImportError('pip install for url %s failed: \n%s',
+                      url, str(e))
+app.logger.debug('running pip install for completedProces')
+
+if completedProcess.returncode == 0:
+
+    app.logger.debug('pip install for url %s was successful: \n %s',
+                     url, completedProcess.stdout)
+
+else:
+    raise ImportError('pip install for url %s failed: \n %s.',
+                      url, completedProcess.stdout)
+
+# Now ok to import IOTFUnctions
+from query import IotEntity, IotEntityType
+app.logger.debug('running pip install for completedProces')
 
 ###
 # Sets up SWAGGER documentation to allow you to see format of JSON to input to try the service.
@@ -47,7 +82,7 @@ get_entity_type_dimensions_input_data = api.model('get_entity_type_dimensions_in
 })
 
 get_entity_type_metadata_input_data = api.model('get_entity_type_metadata_input_data', {
-    'entity_type': fields.String(required=True, description='The Entity Type you want to get the Entity Metadata for.'),
+    'entitytype': fields.String(required=True, description='The Entity Type you want to get the Entity Metadata for.'),
 })
 
 credentials_data = api.model('credentials_data',{
@@ -63,6 +98,7 @@ credentials_data = api.model('credentials_data',{
 class WatsonIot(object):
     def __init__(self):
         app.logger.debug('Intitialize WatsonIot ')
+        self.healthcheck = "Health is OK"
 
     ###
     # Get Entity Type Dimensions
@@ -184,6 +220,11 @@ class WatsonIot(object):
         response_back['data'] = json.loads(query_data)
         return response_back
 
+    def healthcheck(self):
+        app.logger.debug('class WatsonIot - Entereed healthcheck method -------')
+        #Used to see if the skill is working.  Returns no content in Response Body if it is.
+        return self.healthcheck
+
 rest_api = WatsonIot()
 
 @api.route('/query_entity_data')
@@ -226,6 +267,13 @@ class Get_Entity_Type_Metadata(Resource):
         app.logger.debug(json.dumps(request.json, indent=2))
         # curl http://127.0.0.1:5000/v1/api/get_entity_type_metadata
         return rest_api.get_entity_type_metadata(request), 201
+
+@api.route('/healthcheck')
+class HealthCheck(Resource):
+    def get(self, **kwargs):
+        app.logger.debug('class HealthCheck Resource ----------------------')
+        app.logger.debug('class HealthCheck Resource Method get')
+        return  rest_api.healthcheck
 
 if __name__ == '__main__':
     app.register_blueprint(api_v1)
