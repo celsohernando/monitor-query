@@ -56,7 +56,7 @@ else:
                       url, completedProcess.stdout)
 
 # Now ok to import IOTFUnctions
-from query import IotEntity, IotEntityType
+from query import IotEntityType, IotEntity
 app.logger.debug('running pip install for completedProces')
 
 ###
@@ -130,7 +130,7 @@ class WatsonIot(object):
         app.logger.debug('class WatsonIOT , get_entity_types method -------')
         try:
             iot_entity_type = IotEntityType()
-            entity_types_data = iot_entity_type.get_entity_types()
+            entity_types_data = iot_entity_type.get_entity_names()
             logging.info("get_entity_types(self)")
         except KeyError as inst:
             app.logger.debug('get_entity_types method - problems accessing Service')
@@ -173,9 +173,7 @@ class WatsonIot(object):
         except KeyError as inst:
             app.logger.debug('query - Wrong input provided')
 
-        entities_data = IotEntity(entity_type_name=entity_type, entity_name=entity_name).query_entity_data(columns=entity_columns,
-                                                                                                           start_ts=start_ts,
-                                                                                                           end_ts=end_ts)
+        entities_data = IotEntityType(entity_type_name=entity_type)
         response_back = { "data" : None,
                         "responseCode": 200,
                         "requestResult": "Done",
@@ -210,9 +208,14 @@ class WatsonIot(object):
             app.logger.debug('query - Wrong input provided')
         if end_ts == "Now":
             end_ts = dt.datetime.utcnow()
-        query_data = IotEntity(entity_type_name=entity_type, entity_name=entity_name).query_entity_data(columns=entity_columns,
-                                                                                                        start_ts=start_ts,
-                                                                                                        end_ts=end_ts)
+        #query_data = IotEntityType(entity_type_name=entity_type).query_entity_data(columns=entity_columns,
+        #                                                                            start_ts=start_ts,
+        #                                                                           end_ts=end_ts)
+        now = dt.datetime.utcnow()
+        query_data = IotEntity(entity_type_name=entity_type, entity_name=entity_name).query_entity_data(
+            columns=entity_columns,
+            start_ts=start_ts,
+            end_ts=now)
         response_back = { "data" : None,
                         "responseCode": 200,
                         "requestResult": "Done",
@@ -278,6 +281,6 @@ class HealthCheck(Resource):
 if __name__ == '__main__':
     app.register_blueprint(api_v1)
     #Uncomment next line to debug loccally then $python skill.py in terminal
-    app.run(debug=True)
+    #app.run(debug=True)
     #Uncomment next line to run on bluemix.
-    #app.run(host='0.0.0.0', port=int(port))
+    app.run(host='0.0.0.0', port=int(port))

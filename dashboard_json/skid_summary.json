@@ -1,0 +1,174 @@
+{
+    "id": "current_anomaly_alert_table",
+    "size": "XLARGE",
+    "title": "Current Anomaly Alerts for the Last Week",
+    "type": "TABLE",
+    "content": {
+        "columns": [
+            {
+                "dataSourceId": "Current",
+                "label": "Current"
+            },
+            {
+                "dataSourceId": "timestamp",
+                "label": "Time",
+                "type": "TIMESTAMP"
+            }
+        ],
+        "expandedRows": [
+            {
+                "dataSourceId": "device_id",
+                "label": "Device ID"
+            }
+        ],
+        "sort": "DESC",
+        "thresholds": [
+            {
+                "comparison": ">",
+                "dataSourceId": "CurrentSpectralScore",
+                "severity": 1,
+                "value": 1
+            },
+            {
+                "comparison": ">",
+                "dataSourceId": "CurrentKmeansScore",
+                "severity": 1,
+                "value": 1
+            },
+            {
+                "comparison": ">",
+                "dataSourceId": "CurrentGeneralizedScore",
+                "severity": 1,
+                "value": 1
+            },
+            {
+                "comparison": ">",
+                "dataSourceId": "CurrentNoDataScore",
+                "severity": 1,
+                "value": 1
+            }
+        ]
+    },
+    "dataSource": {
+        "attributes": [
+            {
+                "aggregator": "mean",
+                "attribute": "Current",
+                "id": "Current"
+            },
+            {
+                "attribute": "serialNumber",
+                "id": "serialNumber"
+            },
+            {
+                "attribute": "model",
+                "id": "model"
+            },
+            {
+                "attribute": "device_id",
+                "id": "device_id"
+            },
+            {
+                "attribute": "CurrentSpectralScore",
+                "id": "CurrentSpectralScore"
+            },
+            {
+                "attribute": "CurrentKmeansScore",
+                "id": "CurrentKmeansScore"
+            },
+            {
+                "attribute": "CurrentGeneralizedScore",
+                "id": "CurrentGeneralizedScore"
+            },
+            {
+                "attribute": "CurrentNoDataScore",
+                "id": "CurrentNoDataScore"
+            }
+        ],
+        "range": {
+            "count": -24,
+            "interval": "hour"
+        },
+        "timeGrain": "hour",
+        "groupBy": [
+            "model",
+            "device_id"
+        ]
+    }
+},
+
+
+
+{
+            "id": "pump-summary-table",
+            "size": "XLARGE",
+            "title": "Pump Alert Summary",
+            "type": "TABLE",
+            "content": {
+                "columns": [
+                    {
+                        "dataSourceId": "device_id",
+                        "label": "Device ID"
+                    },
+                    {
+                        "dataSourceId": "timestamp",
+                        "label": "Timestamp",
+                        "type": "TIMESTAMP"
+                    },
+                    {
+                        "dataSourceId": "Current",
+                        "label": "Current Amps"
+                    },
+                    {
+                        "dataSourceId": "Flow",
+                        "label": "Flow Gallons Per Minute"
+                    },
+                    {
+                        "dataSourceId": "Voltage",
+                        "label": "Voltage KW"
+                    },
+                    {
+                        "dataSourceId": "Power",
+                        "label": "Power HP"
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "dataSourceId": "Current",
+                        "comparison": ">=",
+                        "severity": 1,
+                        "value": 4,
+                        "label": "Severity"
+                    }
+                ],
+                "sort": "DESC"
+            },
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "Current",
+                        "id": "Current"
+                    },
+                    {
+                        "aggregator": "max",
+                        "attribute": "Current",
+                        "id": "Current"
+                    },
+                    {
+                        "aggregator": "min",
+                        "attribute": "Current",
+                        "id": "Current"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+
+                "groupBy": [
+                    "deviceid",
+                    "Customer"
+                ]
+            }
+        },

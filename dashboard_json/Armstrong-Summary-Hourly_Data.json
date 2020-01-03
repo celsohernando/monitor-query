@@ -1,0 +1,992 @@
+{
+    "timeGrain": "hour",
+    "cards": [
+        {
+            "id": "pump-summary-table",
+            "size": "XLARGE",
+            "title": "Pump Alert Summary",
+            "type": "TABLE",
+            "content": {
+                "columns": [
+                    {
+                        "dataSourceId": "deviceid",
+                        "label": "Device ID"
+                    },
+                    {
+                        "dataSourceId": "timestamp",
+                        "label": "Timestamp",
+                        "type": "TIMESTAMP"
+                    },
+                    {
+                        "dataSourceId": "Current",
+                        "label": "Current Amps"
+                    },
+                    {
+                        "dataSourceId": "Flow",
+                        "label": "Flow Gallons Per Minute"
+                    },
+                    {
+                        "dataSourceId": "Voltage",
+                        "label": "Voltage KW"
+                    },
+                    {
+                        "dataSourceId": "power",
+                        "label": "Power HP"
+                    }
+                ],
+                "thresholds": [
+                    {
+                        "dataSourceId": "Current",
+                        "comparison": ">=",
+                        "severity": 1,
+                        "value": 4,
+                        "label": "Severity"
+                    }
+                ],
+                "sort": "DESC"
+            },
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "Current",
+                        "id": "Current"
+                    },
+                    {
+                        "aggregator": "last",
+                        "attribute": "Flow",
+                        "id": "Flow"
+                    },
+                    {
+                        "aggregator": "last",
+                        "attribute": "Voltage",
+                        "id": "Voltage"
+                    },
+                    {
+                        "aggregator": "last",
+                        "attribute": "power",
+                        "id": "power"
+                    }
+                ],
+                "groupBy": [
+                    "deviceid"
+                ]
+            }
+        },
+    {
+            "content": {
+                "alt": "Generation 5 Pump Health",
+                "zoomMax": 1,
+                "hotspots": [
+                    {
+                        "color": "#FFF",
+                        "content": {
+                            "attributes": [
+                                {
+                                    "dataSourceId": "warning",
+                                    "label": "Warning Alert"
+                                }
+                            ]
+                        },
+                        "locations": [
+                            {
+                                "xDataSourceId": "alarm",
+                                "yDataSourceId": "warning",
+                                "dataFilter": {
+                                    "deviceid": "device_id"
+                                }
+                            }
+                        ],
+                        "thresholds": [
+                            {
+                                "color": "green",
+                                "comparison": "=",
+                                "dataSourceId": "warning",
+                                "icon": "icon--close--solid",
+                                "isHotspot": true,
+                                "value": 0
+                            },
+                            {
+                                "color": "yellow",
+                                "comparison": ">",
+                                "dataSourceId": "warning",
+                                "icon": "icon--close--solid",
+                                "isHotspot": true,
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "color": "#FFF",
+                        "content": {
+                            "attributes": [
+                                {
+                                    "dataSourceId": "alarm",
+                                    "label": "Alarm Alert"
+                                }
+                            ]
+                        },
+                        "locations": [
+                            {
+                                "xDataSourceId": "warning",
+                                "yDataSourceId": "alarm",
+                                "dataFilter": {
+                                    "deviceid": "device_id"
+                                }
+                            }
+                        ],
+                        "thresholds": [
+                            {
+                                "color": "green",
+                                "comparison": "=",
+                                "dataSourceId": "alarm",
+                                "icon": "icon--close--solid",
+                                "isHotspot": true,
+                                "value": 0
+                            },
+                            {
+                                "color": "red",
+                                "comparison": ">",
+                                "dataSourceId": "alarm",
+                                "icon": "icon--close--solid",
+                                "isHotspot": true,
+                                "value": 0
+                            }
+                        ]
+                    }
+                ],
+                "image": "pump5"
+            },
+            "dataSource": {
+                "attributes": [
+                    {
+                        "attribute": "alarm",
+                        "id": "alarm"
+                    },
+                    {
+                        "attribute": "warning",
+                        "id": "warning"
+                    }
+                ]
+                "groupBy": [
+                    "deviceid"
+                ]
+            },
+            "id": "pump5",
+            "size": "WIDE",
+            "title": "Pump Alerts",
+            "type": "IMAGE"
+        },
+        {
+            "id": "card-alarm-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "alarm_Hourly_Data_mean",
+                        "id": "alarm_Hourly_Data_mean"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "alarm_Hourly_Data_mean",
+                        "label": "Mean"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Alarm"
+            },
+            "size": "MEDIUM",
+            "title": "alarm",
+            "type": "TIMESERIES"
+        },
+        {
+            "id": "card-Current-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "Current_Hourly_Data_mean",
+                        "id": "Current_Hourly_Data_mean"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "Current_Hourly_Data_mean",
+                        "label": "Mean"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Current"
+            },
+            "size": "MEDIUM",
+            "title": "Current",
+            "type": "TIMESERIES"
+        },
+        {
+            "id": "card-entity_id-value",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "last",
+                        "attribute": "entity_id_Hourly_Data_last",
+                        "id": "entity_id_Hourly_Data_last"
+                    }
+                ]
+            },
+            "content": {
+                "attributes": [
+                    {
+                        "dataSourceId": "entity_id_Hourly_Data_last",
+                        "label": "Last entity_id"
+                    }
+                ]
+            },
+            "size": "XSMALLWIDE",
+            "title": "entity_id",
+            "type": "VALUE"
+        },
+        {
+            "id": "card-Flow-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "Flow_Hourly_Data_mean",
+                        "id": "Flow_Hourly_Data_mean"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "Flow_Hourly_Data_mean",
+                        "label": "Mean"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Flow"
+            },
+            "size": "MEDIUM",
+            "title": "Flow",
+            "type": "TIMESERIES"
+        },
+        {
+            "id": "card-Head-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "Head_Hourly_Data_mean",
+                        "id": "Head_Hourly_Data_mean"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "Head_Hourly_Data_mean",
+                        "label": "Mean"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Head"
+            },
+            "size": "MEDIUM",
+            "title": "Head",
+            "type": "TIMESERIES"
+        },
+        {
+            "id": "card-KW_HOUR-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "KW_HOUR_Hourly_Data_mean",
+                        "id": "KW_HOUR_Hourly_Data_mean"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "KW_HOUR_Hourly_Data_mean",
+                        "label": "Mean"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Kw_hour"
+            },
+            "size": "MEDIUM",
+            "title": "KW_HOUR",
+            "type": "TIMESERIES"
+        },
+        {
+            "id": "card-power-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "power_Hourly_Data_mean",
+                        "id": "power_Hourly_Data_mean"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "power_Hourly_Data_mean",
+                        "label": "Mean"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Power"
+            },
+            "size": "MEDIUM",
+            "title": "power",
+            "type": "TIMESERIES"
+        },
+        {
+            "id": "card-Pump_Mode-value",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "last",
+                        "attribute": "Pump_Mode_Hourly_Data_last",
+                        "id": "Pump_Mode_Hourly_Data_last"
+                    }
+                ]
+            },
+            "content": {
+                "attributes": [
+                    {
+                        "dataSourceId": "Pump_Mode_Hourly_Data_last",
+                        "label": "Last pump_mode"
+                    }
+                ]
+            },
+            "size": "XSMALLWIDE",
+            "title": "Pump_Mode",
+            "type": "VALUE"
+        },
+        {
+            "id": "card-Speed-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "Speed_Hourly_Data_mean",
+                        "id": "Speed_Hourly_Data_mean"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "Speed_Hourly_Data_mean",
+                        "label": "Mean"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Speed"
+            },
+            "size": "MEDIUM",
+            "title": "Speed",
+            "type": "TIMESERIES"
+        },
+        {
+            "id": "card-Temperature-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "Temperature_Hourly_Data_mean",
+                        "id": "Temperature_Hourly_Data_mean"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "Temperature_Hourly_Data_mean",
+                        "label": "Mean"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Temperature"
+            },
+            "size": "MEDIUM",
+            "title": "Temperature",
+            "type": "TIMESERIES"
+        },
+        {
+            "id": "card-version-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "last",
+                        "attribute": "version_Hourly_Data_last",
+                        "id": "version_Hourly_Data_last"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "version_Hourly_Data_last",
+                        "label": "Last"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Version"
+            },
+            "size": "MEDIUM",
+            "title": "version",
+            "type": "TIMESERIES"
+        },
+        {
+            "id": "card-Voltage-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "mean",
+                        "attribute": "Voltage_Hourly_Data_mean",
+                        "id": "Voltage_Hourly_Data_mean"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "Voltage_Hourly_Data_mean",
+                        "label": "Mean"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Voltage"
+            },
+            "size": "MEDIUM",
+            "title": "Voltage",
+            "type": "TIMESERIES"
+        },
+        {
+            "id": "card-warn-timeseries",
+            "dataSource": {
+                "attributes": [
+                    {
+                        "aggregator": "last",
+                        "attribute": "warn_Hourly_Data_last",
+                        "id": "warn_Hourly_Data_last"
+                    }
+                ],
+                "range": {
+                    "count": -24,
+                    "interval": "hour"
+                },
+                "timeGrain": "hour"
+            },
+            "content": {
+                "series": [
+                    {
+                        "dataSourceId": "warn_Hourly_Data_last",
+                        "label": "Last"
+                    }
+                ],
+                "xLabel": "Time",
+                "yLabel": "Warn"
+            },
+            "size": "MEDIUM",
+            "title": "warn",
+            "type": "TIMESERIES"
+        }
+    ],
+    "title": "Hourly_Data",
+    "layouts": {
+        "max": [
+            {
+                "i": "current_anomaly_alert_table",
+                "x": 0,
+                "y": 0
+            },
+            {
+                "i": "card-alarm-timeseries",
+                "x": 8,
+                "y": 1
+            },
+            {
+                "i": "card-Current-timeseries",
+                "x": 6,
+                "y": 4
+            },
+            {
+                "i": "card-entity_id-value",
+                "x": 8,
+                "y": 0
+            },
+            {
+                "i": "card-Flow-timeseries",
+                "x": 0,
+                "y": 4
+            },
+            {
+                "i": "card-Head-timeseries",
+                "x": 6,
+                "y": 6
+            },
+            {
+                "i": "card-KW_HOUR-timeseries",
+                "x": 0,
+                "y": 6
+            },
+            {
+                "i": "card-power-timeseries",
+                "x": 6,
+                "y": 8
+            },
+            {
+                "i": "card-Pump_Mode-value",
+                "x": 11,
+                "y": 0
+            },
+            {
+                "i": "card-Speed-timeseries",
+                "x": 0,
+                "y": 8
+            },
+            {
+                "i": "card-Temperature-timeseries",
+                "x": 6,
+                "y": 10
+            },
+            {
+                "i": "card-version-timeseries",
+                "x": 0,
+                "y": 10
+            },
+            {
+                "i": "card-Voltage-timeseries",
+                "x": 6,
+                "y": 12
+            },
+            {
+                "i": "card-warn-timeseries",
+                "x": 0,
+                "y": 12
+            }
+        ],
+        "xl": [
+            {
+                "i": "current_anomaly_alert_table",
+                "x": 0,
+                "y": 0
+            },
+            {
+                "i": "card-alarm-timeseries",
+                "x": 0,
+                "y": 4
+            },
+            {
+                "i": "card-Current-timeseries",
+                "x": 8,
+                "y": 4
+            },
+            {
+                "i": "card-entity_id-value",
+                "x": 12,
+                "y": 1
+            },
+            {
+                "i": "card-Flow-timeseries",
+                "x": 8,
+                "y": 6
+            },
+            {
+                "i": "card-Head-timeseries",
+                "x": 0,
+                "y": 6
+            },
+            {
+                "i": "card-KW_HOUR-timeseries",
+                "x": 0,
+                "y": 8
+            },
+            {
+                "i": "card-power-timeseries",
+                "x": 8,
+                "y": 8
+            },
+            {
+                "i": "card-Pump_Mode-value",
+                "x": 12,
+                "y": 0
+            },
+            {
+                "i": "card-Speed-timeseries",
+                "x": 8,
+                "y": 10
+            },
+            {
+                "i": "card-Temperature-timeseries",
+                "x": 0,
+                "y": 10
+            },
+            {
+                "i": "card-version-timeseries",
+                "x": 8,
+                "y": 12
+            },
+            {
+                "i": "card-Voltage-timeseries",
+                "x": 0,
+                "y": 12
+            },
+            {
+                "i": "card-warn-timeseries",
+                "x": 8,
+                "y": 14
+            }
+        ],
+        "lg": [
+            {
+                "i": "current_anomaly_alert_table",
+                "x": 0,
+                "y": 0
+            },
+            {
+                "i": "card-alarm-timeseries",
+                "x": 8,
+                "y": 4
+            },
+            {
+                "i": "card-Current-timeseries",
+                "x": 8,
+                "y": 6
+            },
+            {
+                "i": "card-entity_id-value",
+                "x": 0,
+                "y": 4
+            },
+            {
+                "i": "card-Flow-timeseries",
+                "x": 8,
+                "y": 8
+            },
+            {
+                "i": "card-Head-timeseries",
+                "x": 0,
+                "y": 7
+            },
+            {
+                "i": "card-KW_HOUR-timeseries",
+                "x": 0,
+                "y": 9
+            },
+            {
+                "i": "card-power-timeseries",
+                "x": 8,
+                "y": 10
+            },
+            {
+                "i": "card-Pump_Mode-value",
+                "x": 4,
+                "y": 4
+            },
+            {
+                "i": "card-Speed-timeseries",
+                "x": 8,
+                "y": 12
+            },
+            {
+                "i": "card-Temperature-timeseries",
+                "x": 0,
+                "y": 11
+            },
+            {
+                "i": "card-version-timeseries",
+                "x": 0,
+                "y": 15
+            },
+            {
+                "i": "card-Voltage-timeseries",
+                "x": 0,
+                "y": 13
+            },
+            {
+                "i": "card-warn-timeseries",
+                "x": 0,
+                "y": 5
+            }
+        ],
+        "md": [
+            {
+                "i": "current_anomaly_alert_table",
+                "x": 0,
+                "y": 0
+            },
+            {
+                "i": "card-alarm-timeseries",
+                "x": 0,
+                "y": 5
+            },
+            {
+                "i": "card-Current-timeseries",
+                "x": 0,
+                "y": 7
+            },
+            {
+                "i": "card-entity_id-value",
+                "x": 0,
+                "y": 4
+            },
+            {
+                "i": "card-Flow-timeseries",
+                "x": 0,
+                "y": 9
+            },
+            {
+                "i": "card-Head-timeseries",
+                "x": 0,
+                "y": 11
+            },
+            {
+                "i": "card-KW_HOUR-timeseries",
+                "x": 0,
+                "y": 13
+            },
+            {
+                "i": "card-power-timeseries",
+                "x": 0,
+                "y": 15
+            },
+            {
+                "i": "card-Pump_Mode-value",
+                "x": 4,
+                "y": 4
+            },
+            {
+                "i": "card-Speed-timeseries",
+                "x": 0,
+                "y": 17
+            },
+            {
+                "i": "card-Temperature-timeseries",
+                "x": 0,
+                "y": 19
+            },
+            {
+                "i": "card-version-timeseries",
+                "x": 0,
+                "y": 21
+            },
+            {
+                "i": "card-Voltage-timeseries",
+                "x": 0,
+                "y": 23
+            },
+            {
+                "i": "card-warn-timeseries",
+                "x": 0,
+                "y": 25
+            }
+        ],
+        "sm": [
+            {
+                "i": "card-alarm-timeseries",
+                "x": 0,
+                "y": 2
+            },
+            {
+                "i": "card-Current-timeseries",
+                "x": 0,
+                "y": 4
+            },
+            {
+                "i": "card-device_id-value",
+                "x": 0,
+                "y": 0
+            },
+            {
+                "i": "card-entity_id-value",
+                "x": 2,
+                "y": 0
+            },
+            {
+                "i": "card-Flow-timeseries",
+                "x": 0,
+                "y": 6
+            },
+            {
+                "i": "card-Head-timeseries",
+                "x": 0,
+                "y": 8
+            },
+            {
+                "i": "card-KW_HOUR-timeseries",
+                "x": 0,
+                "y": 10
+            },
+            {
+                "i": "card-power-timeseries",
+                "x": 0,
+                "y": 12
+            },
+            {
+                "i": "card-Pump_Mode-value",
+                "x": 2,
+                "y": 1
+            },
+            {
+                "i": "card-Speed-timeseries",
+                "x": 0,
+                "y": 14
+            },
+            {
+                "i": "card-Temperature-timeseries",
+                "x": 0,
+                "y": 16
+            },
+            {
+                "i": "card-version-timeseries",
+                "x": 0,
+                "y": 18
+            },
+            {
+                "i": "card-Voltage-timeseries",
+                "x": 0,
+                "y": 20
+            },
+            {
+                "i": "card-warn-timeseries",
+                "x": 0,
+                "y": 22
+            }
+        ],
+        "xs": [
+            {
+                "i": "card-alarm-timeseries",
+                "x": 0,
+                "y": 0
+            },
+            {
+                "i": "card-Current-timeseries",
+                "x": 0,
+                "y": 2
+            },
+            {
+                "i": "card-device_id-value",
+                "x": 0,
+                "y": 4
+            },
+            {
+                "i": "card-entity_id-value",
+                "x": 0,
+                "y": 5
+            },
+            {
+                "i": "card-Flow-timeseries",
+                "x": 0,
+                "y": 6
+            },
+            {
+                "i": "card-Head-timeseries",
+                "x": 0,
+                "y": 8
+            },
+            {
+                "i": "card-KW_HOUR-timeseries",
+                "x": 0,
+                "y": 11
+            },
+            {
+                "i": "card-power-timeseries",
+                "x": 0,
+                "y": 13
+            },
+            {
+                "i": "card-Pump_Mode-value",
+                "x": 0,
+                "y": 15
+            },
+            {
+                "i": "card-Speed-timeseries",
+                "x": 0,
+                "y": 16
+            },
+            {
+                "i": "card-Temperature-timeseries",
+                "x": 0,
+                "y": 18
+            },
+            {
+                "i": "card-version-timeseries",
+                "x": 0,
+                "y": 20
+            },
+            {
+                "i": "card-Voltage-timeseries",
+                "x": 0,
+                "y": 22
+            },
+            {
+                "i": "card-warn-timeseries",
+                "x": 0,
+                "y": 24
+            }
+        ]
+    }
+}
