@@ -637,17 +637,17 @@
             {
                 "i": "pump-summary-table",
                 "x": 0,
-                "y": 0
+                "y": 4
             },
             {
                 "i": "pump5",
-                "x": 8,
-                "y": 4
+                "x": 0,
+                "y": 0
             },
             {
                 "i": "card-alarm-timeseries",
                 "x": 0,
-                "y": 4
+                "y": 8
             },
             {
                 "i": "card-Current-timeseries",
@@ -656,7 +656,7 @@
             },
             {
                 "i": "card-entity_id-value",
-                "x": 12,
+                "x": 8,
                 "y": 1
             },
             {
@@ -667,12 +667,12 @@
             {
                 "i": "card-Head-timeseries",
                 "x": 0,
-                "y": 6
+                "y": 10
             },
             {
                 "i": "card-KW_HOUR-timeseries",
                 "x": 0,
-                "y": 8
+                "y": 12
             },
             {
                 "i": "card-power-timeseries",
@@ -681,7 +681,7 @@
             },
             {
                 "i": "card-Pump_Mode-value",
-                "x": 12,
+                "x": 8,
                 "y": 0
             },
             {
@@ -692,7 +692,7 @@
             {
                 "i": "card-Temperature-timeseries",
                 "x": 0,
-                "y": 10
+                "y": 14
             },
             {
                 "i": "card-version-timeseries",
@@ -702,7 +702,7 @@
             {
                 "i": "card-Voltage-timeseries",
                 "x": 0,
-                "y": 12
+                "y": 16
             },
             {
                 "i": "card-warn-timeseries",
@@ -714,89 +714,89 @@
             {
                 "i": "pump-summary-table",
                 "x": 0,
-                "y": 0
+                "y": 4
             },
             {
                 "i": "pump5",
                 "x": 0,
-                "y": 5
+                "y": 0
             },
             {
                 "i": "card-alarm-timeseries",
                 "x": 8,
-                "y": 4
+                "y": 8
             },
             {
                 "i": "card-Current-timeseries",
                 "x": 8,
-                "y": 6
+                "y": 10
             },
             {
                 "i": "card-entity_id-value",
-                "x": 0,
-                "y": 9
+                "x": 8,
+                "y": 1
             },
             {
                 "i": "card-Flow-timeseries",
                 "x": 8,
-                "y": 8
+                "y": 12
             },
             {
                 "i": "card-Head-timeseries",
                 "x": 0,
-                "y": 12
+                "y": 10
             },
             {
                 "i": "card-KW_HOUR-timeseries",
                 "x": 0,
-                "y": 14
+                "y": 12
             },
             {
                 "i": "card-power-timeseries",
                 "x": 8,
-                "y": 10
+                "y": 14
             },
             {
                 "i": "card-Pump_Mode-value",
-                "x": 4,
-                "y": 4
+                "x": 8,
+                "y": 0
             },
             {
                 "i": "card-Speed-timeseries",
                 "x": 8,
-                "y": 12
+                "y": 16
             },
             {
                 "i": "card-Temperature-timeseries",
                 "x": 0,
-                "y": 16
+                "y": 14
             },
             {
                 "i": "card-version-timeseries",
                 "x": 0,
-                "y": 20
+                "y": 18
             },
             {
                 "i": "card-Voltage-timeseries",
                 "x": 0,
-                "y": 18
+                "y": 16
             },
             {
                 "i": "card-warn-timeseries",
                 "x": 0,
-                "y": 10
+                "y": 8
             }
         ],
         "md": [
             {
                 "i": "pump-summary-table",
                 "x": 0,
-                "y": 0
+                "y": 5
             },
             {
                 "i": "pump5",
                 "x": 0,
-                "y": 5
+                "y": 0
             },
             {
                 "i": "card-alarm-timeseries",
@@ -868,12 +868,12 @@
             {
                 "i": "pump-summary-table",
                 "x": 0,
-                "y": 0
+                "y": 5
             },
             {
                 "i": "pump5",
                 "x": 0,
-                "y": 5
+                "y": 0
             },
             {
                 "i": "card-alarm-timeseries",
