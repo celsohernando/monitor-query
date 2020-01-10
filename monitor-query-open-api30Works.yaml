@@ -1,0 +1,67 @@
+swagger: "2.0"
+info:
+  title: Maximo Asset Monitor Query REST API
+  description: A Maximo Asset Monitor API Query REST interface that uses a allows you to converse with Maximo Asset Monitor data using the swagger-2.0 specification
+  version: 1.0.0
+
+servers:
+  - url: http://monitor-query.mybluemix.net/v1/api
+
+paths:
+  /get_entity_types:
+    get:
+      summary: Gets Entity Types from Maximo Asset Monitor.
+      responses:
+        200:
+          description: OK
+  /get_entity_type_dimensions:
+    post:
+      summary: Gets Entity Type Dimenions from Maximo Asset Monitor for a Entity Type.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                entitytype:
+                  type: string
+              example:   # Sample object
+                entitytype: Clients04
+      responses:
+        200:
+          description: OK
+  /get_entity_type_metadata:
+    post:
+      summary: Gets Entity Type Metadata from Maximo Asset Monitor for a given Entity Type.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                entitytype:
+                  type: string
+              example:   # Sample object
+                entitytype: Clients04
+      responses:
+        200:
+          description: OK
+  /query_entity_data:
+    post:
+      summary: Gets Entity Metrics by specifying entity id, columns names and start and end times description:.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:      # Request body contents
+              type: object
+              properties:
+                entitytype:
+                  type: string
+              example:   # Sample object
+                entitytype: Clients04
+      responses:
+        200:
+          description: OK

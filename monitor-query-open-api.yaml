@@ -1,0 +1,95 @@
+swagger: "2.0"
+info:
+  title: Maximo Asset Monitor Query REST API
+  description: A Maximo Asset Monitor API Query REST interface that uses a allows you to converse with Maximo Asset Monitor data using the swagger-2.0 specification
+  version: 1.0.0
+
+host: monitor-query.mybluemix.net
+basePath: /v1/api
+schemes:
+  - https
+
+paths:
+  /get_entity_types:
+    get:
+      summary: Gets all Entity Types from Maximo Asset Monitor.
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+
+  /get_entity_type_dimensions:
+    post:
+      summary: Gets Entity Type Dimenions from Maximo Asset Monitor for a Entity Type.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: payload
+          description: The entity type to retrieve information about
+          schema:
+            type: object
+            required:
+              - entitytype
+            properties:
+              entitytype:
+                type: string
+      responses:
+        200:
+          description: OK
+
+  /get_entity_type_metadata:
+    post:
+      summary: Gets Entity Type Metadata from Maximo Asset Monitor for a Entity Type.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: payload
+          description: The entity type to retrieve information about
+          schema:
+            type: object
+            required:
+              - entitytype
+            properties:
+              entitytype:
+                type: string
+      responses:
+        200:
+          description: OK
+
+  /query_entity_data:
+    post:
+      summary: Gets Entity data from Maximo Asset Monitor by specifying start end timestamps and columns to retrieve.
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: payload
+          description: The entity type to retrieve information about
+          schema:
+            type: object
+            required:
+              - entitytype
+              - entity
+              - start_ts
+              - end_ts
+              - columns
+            properties:
+              entitytype:
+                type: string
+              entity:
+                type: string
+              start_ts:
+                type: string
+              end_ts:
+                type: string
+              columns:
+                type: array
+                items:
+                  type: string
+
+      responses:
+        200:
+          description: OK

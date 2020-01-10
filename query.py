@@ -199,15 +199,16 @@ if __name__ == "__main__":
                                                                                        start_ts=start_ts,
                                                                                        end_ts=now)
     '''
-        {
-          "entitytype": "cc3200LP",
-          "entity": "Blower-North",
-          "start_ts": "2019-12-06 11:43:49.125735",
-          "end_ts": "Now",
-          "columns": [
-            "Temperature"
-          ]
-        }
+    {
+      "entitytype": "pump_de_gen5",
+      "entity": "04714B60011A",
+      "start_ts": "2019-1-06 11:43:49.125735",
+      "end_ts": "Now",
+      "columns": [
+        "Flow"
+      ]
+    }
+
     iot_entity_type = IotEntityType(entity_type_name = "cc3200LP")
     logging.info("get_entity_types(self) %s " %iot_entity_type.get_entity_names())
     logging.info("get meta_data and entities  %s " % iot_entity_type.get_entity_type_metadata("cc3200LP"))

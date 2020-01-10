@@ -15,9 +15,11 @@ import random
 import numpy as np
 import subprocess
 import settings
+from flask_cors import CORS
 
 #help curl --help
 app = Flask(__name__, static_folder='static')
+cors = CORS(app)
 app.wsgi_app = ProxyFix(app.wsgi_app)
 port =  os.getenv('PORT', '5000')
 app.logger.addHandler(logging.StreamHandler())
