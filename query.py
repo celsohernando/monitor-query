@@ -26,7 +26,7 @@ class IotEntityType(object):
     def __init__(self, entity_type_name=None):
         self.entity_type_name = entity_type_name
         logging.info(self.entity_type_name)
-        self.db_schema = "BLUADMIN"  # only required if you are not using the default
+        self.db_schema = "public"  # only required if you are not using the default
         # self.table_name =  entity_type_name.upper()  # change to a valid entity time series table name
         # self.dim_table_name = "DM_"+self.table_name  # change to a entity dimenstion table name
         # self.timestamp = 'evt_timestamp'
@@ -126,7 +126,7 @@ class IotEntity(object):
         # replace with valid table and column names
         self.entity_type_name = entity_type_name
         self.entity_name = entity_name
-        self.db_schema = "BLUADMIN"  # only required if you are not using the default
+        self.db_schema = "public"  # only required if you are not using the default
         self.table_name =  entity_type_name.upper()  # change to a valid entity time series table name
         self.dim_table_name = "DM_"+self.table_name  # change to a entity dimenstion table name
         self.timestamp = 'evt_timestamp'
