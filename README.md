@@ -75,11 +75,12 @@ $ bluemix app logs "your turbine simulator app name"  --recent
 
 4. Configure required user defined environment variables used to run the simulator.  Add user defined variables below in the deployed IBM Cloud Foundry Application:
 
-Copy your AS credentials json object into the file credentials_beta-3.json
-Replace the "db" property name with "databaseName" in the postgres section:
+* Copy your AS credentials json object into the file credentials_beta-3.json
+* Replace the "db" property name with "databaseName" in the postgres section:
 
+```
 "databaseName":"ibmclouddb"
-
+```
 
 5. Restart your simulator app so that it will detect your updated user defined environment variables.
 
